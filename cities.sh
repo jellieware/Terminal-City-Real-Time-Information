@@ -68,6 +68,9 @@ offset="$myoffset"
 fi
 myfinaloffset="$offset"
 TZ=UTC date --date="$myfinaloffset hours"
+echo -e "\e[38;2;173;255;47m" "temp:" "\e[0m"
+temp=$(curl -s "https://api.open-meteo.com/v1/forecast?latitude=${key_lat[$citynumber]}&longitude=${key_long[$citynumber]}&current=temperature_2m&temperature_unit=fahrenheit" | jq '.current.temperature_2m')
+echo $temp "°F"
 echo -e "\e[38;2;173;255;47m" "done" "\e[0m"
 fi
 if [[ $found == 0 ]];then
