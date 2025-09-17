@@ -5,5 +5,6 @@ Displays real time information of cities offline
 Depends on "jq" "sunwait" "bc" "tzf-rs"
 <br>
 <br>
-<img width="1080" height="2400" alt="1000545534" src="https://github.com/user-attachments/assets/d9cf3fad-4b61-483d-9223-97c2a6ab3fe7" />
+<img width="1080" height="2400" alt="1000545535" src="https://github.com/user-attachments/assets/330db9da-7eec-43e8-953f-d6f6210f5bd4" />
+
 
