@@ -1,18 +1,28 @@
 #!/usr/bin/env bash
 lat=""
 lng=""
+found=""
 echo "Please enter city name:"
 read name
 cname="${name^}"
-mapfile -t countries < <(jq --arg sname "$cname" -r '.[] | select(.name == $sname) | .country' world_cities5000.json)
-mapfile -t your_array < <(jq --arg sname "$cname" -r '.[] | select(.name == $sname) | .name' world_cities5000.json)
-mapfile -t key_lat < <(jq --arg sname "$cname" -r '.[] | select(.name == $sname) | .lat' world_cities5000.json)
-mapfile -t key_long < <(jq --arg sname "$cname" -r '.[] | select(.name == $sname) | .lng' world_cities5000.json)
+mapfile -t countries < <(jq --arg sname "$cname" -r '.[] | select(.name | contains($sname)) | .country' world_cities5000.json)
+mapfile -t your_array < <(jq --arg sname "$cname" -r '.[] | select(.name | contains($sname)) | .name' world_cities5000.json)
+mapfile -t key_lat < <(jq --arg sname "$cname" -r '.[] | select(.name | contains($sname)) | .lat' world_cities5000.json)
+mapfile -t key_long < <(jq --arg sname "$cname" -r '.[] | select(.name | contains($sname)) | .lng' world_cities5000.json)
 numberofcities=0
 for cities in "${your_array[@]}"; do
-  echo -e "\e[38;2;173;255;47m  $numberofcities ${countries[$numberofcities]} $cities \e[0m"
-  ((numberofcities++))
+bodhi=$(tzf --lng ${key_long[$numberofcities]} --lat ${key_lat[$numberofcities]})
+temp="${bodhi#\"}"
+result="${temp%\"}"
+  echo -e "\e[38;2;173;255;47m  $numberofcities ${countries[$numberofcities]} $cities $result \e[0m"
+    ((numberofcities++))
+    if [[ -n "$cities" ]]; then
+        found=1
+    else
+        found=0
+    fi
 done
+if [[ $found == 1 ]];then
 echo "Please choose city:"
 read citynumber
 echo "-----"
@@ -59,6 +69,10 @@ fi
 myfinaloffset="$offset"
 TZ=UTC date --date="$myfinaloffset hours"
 echo -e "\e[38;2;173;255;47m" "done" "\e[0m"
+fi
+if [[ $found == 0 ]];then
+echo "No cities found"
+fi
 sleep 10
 
 
